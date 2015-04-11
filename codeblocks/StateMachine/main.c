@@ -27,7 +27,6 @@ int error(void);
 
 int main()
 {
-
     transition_t state_transitions[] = {
         {entry_state,   ok,     state_1},
         {entry_state,   fail,   exit_state},

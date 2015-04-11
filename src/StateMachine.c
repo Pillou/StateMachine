@@ -2,6 +2,7 @@
  *  \brief table driven state machine source file
  */
 
+/// TODO (guillaume#1#): Sort look up table and put a smarter _lookup_transitions function
 
 #include "StateMachine.h"
 
@@ -14,7 +15,6 @@
  * \return state_fn : pointer to next function to execute, 0 if error
  */
 static state_fn _lookup_transitions(const transition_t *table, int table_size, state_fn cur_state, int rc){
-/// TODO (guillaume#1#): Sort look up table to increase speed.
     int i=0;
     state_fn return_fn;
     for(i=0; i<table_size; i++){
