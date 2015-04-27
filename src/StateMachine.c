@@ -6,6 +6,10 @@
 
 #include "StateMachine.h"
 
+#if !defined(NULL)
+  #define NULL ((void*)0)
+#endif
+
 /** \brief static StateFunction _LookupTransition( const StateTransition *table, \
  *                                      int table_size, \
  *                                      StateFunction cur_state, \
@@ -21,14 +25,13 @@ static StateFunction _LookupTransition( const StateTransition *table, \
                                         StateFunction cur_state, \
                                         StateReturn rc){
   int i=0;
-  StateFunction return_fn;
   for(i=0; i<table_size; i++){
-    if(cur_state == table[i].src_state && rc == table[i].ret_code){
-      return_fn = table[i].next_state;
-      return return_fn;
+    if( cur_state == table[i].src_state && \
+        rc == table[i].ret_code){
+      return table[i].next_state;
     }
   }
-  return 0;
+  return NULL;
 }
 
 /** \brief StateReturn StateMachine( const StateTransition *table, \
@@ -41,21 +44,20 @@ static StateFunction _LookupTransition( const StateTransition *table, \
  * \param StateFunction exit_state
  * \return StateReturn
  */
-
 StateReturn StateMachine( const StateTransition *table, \
                           int table_size, \
                           StateFunction starting_state, \
                           StateFunction exit_state){
-    StateReturn return_code = 0;
-    StateFunction current_state = starting_state;
+  StateReturn return_code = 0;
+  StateFunction current_state = starting_state;
 
-    while(current_state != 0){
-        return_code = current_state();
-        if( current_state == exit_state){
-            return return_code;
-        }
-        current_state = _LookupTransition(table, table_size, current_state, return_code);
+  while(current_state != NULL){
+    return_code = current_state();
+    if( current_state == exit_state){
+      return return_code;
     }
-    while(1){}; // catch error in lookup table
+    current_state = _LookupTransition(table, table_size, current_state, return_code);
+  }
+  for(;;){}; // catch error in lookup table
 }
 

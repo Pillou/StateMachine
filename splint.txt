@@ -1,0 +1,10 @@
+Splint 3.1.2 --- 03 May 2009
+
+src/StateMachine.c: (in function _LookupTransition)
+src/StateMachine.c:31:34: Released storage table[].next_state reachable from
+                             parameter at return point
+  Memory is used after it has been released (either by passing as an only param
+  or assigning to an only global). (Use -usereleased to inhibit warning)
+   src/StateMachine.c:31:14: Storage table[].next_state released
+
+Finished checking --- 1 code warning
