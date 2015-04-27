@@ -3,41 +3,43 @@
 
 #include "StateMachine.h"
 
-enum ret_codes { ok, fail, repeat};
+#define STATE_OK      0
+#define STATE_FAIL    1
+#define STATE_REPEAT  2
 
 int entry_state(void){
-    printf("entry_state\n");
-    return ok;
+  printf("entry_state\n");
+  return STATE_OK;
 }
 int state_1(void){
-    printf("state_1\n");
-    return ok;
+  printf("state_1\n");
+  return STATE_OK;
 }
 
 int state_2(void){
-    printf("state_2\n");
-    return fail;
+  printf("state_2\n");
+  return STATE_FAIL;
 }
 int exit_state(void){
-    printf("exit_state\n");
-    return ok;
+  printf("exit_state\n");
+  return STATE_OK;
 }
 int error(void);
 
 
 int main()
 {
-    transition_t state_transitions[] = {
-        {entry_state,   ok,     state_1},
-        {entry_state,   fail,   exit_state},
-        {state_1,       ok,     state_2},
-        {state_1,       fail,   exit_state},
-        {state_1,       repeat, state_1},
-        {state_2,       ok,     exit_state},
-        {state_2,       fail,   exit_state},
-        {state_2,       repeat, state_1}
-    };
-    int table_size = sizeof(state_transitions)/sizeof(transition_t);
+  StateTransition transtion_table[] = {
+    {entry_state,   STATE_OK,     state_1},
+    {entry_state,   STATE_FAIL,   exit_state},
+    {state_1,       STATE_OK,     state_2},
+    {state_1,       STATE_FAIL,   exit_state},
+    {state_1,       STATE_REPEAT, state_1},
+    {state_2,       STATE_OK,     exit_state},
+    {state_2,       STATE_FAIL,   exit_state},
+    {state_2,       STATE_REPEAT, state_1}
+  };
+  int table_size = sizeof(transtion_table)/sizeof(StateTransition);
 
-    return state_machine(state_transitions, table_size, entry_state, exit_state);
+  return StateMachine(transtion_table, table_size, entry_state, exit_state);
 }

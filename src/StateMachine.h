@@ -5,16 +5,25 @@
 #ifndef STATEMACHINE_H_INCLUDED
 #define STATEMACHINE_H_INCLUDED
 
-/**< transition between two state structure */
-typedef struct {
-    int (*src_state)(void);
-    int ret_code;
-    int (*next_state)(void);
-} transition_t;
+/**< type returned by state function (can be changed by user) */
+typedef int StateReturn;
+
 
 /**< state function pointer typedef */
-typedef int (*state_fn)(void);
+typedef StateReturn (*StateFunction)(void);
 
-int state_machine(const transition_t *table, int table_size, state_fn starting_state, state_fn exit_state);
+
+/**< transition between two state structure */
+typedef struct {
+    StateFunction src_state;
+    StateReturn ret_code;
+    StateFunction next_state;
+} StateTransition;
+
+
+StateReturn StateMachine( const StateTransition *table, \
+                          int table_size, \
+                          StateFunction starting_state, \
+                          StateFunction exit_state);
 
 #endif // STATEMACHINE_H_INCLUDED
